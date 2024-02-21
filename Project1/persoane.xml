@@ -4,11 +4,67 @@
         <nume>Popescu</nume>
         <prenume>Ion</prenume>
         <varsta>23</varsta>
+        <data-nasterii>
+            <an>2000</an>
+            <luna>10</luna>
+            <ziua>2</ziua>
+        </data-nasterii>
         <adresa>
             <strada>Bulevardul Copou</strada>
             <numar>42</numar>
             <localitate>Iași</localitate>
             <judet>Iași</judet>
+            <tara>România</tara>
+        </adresa>
+    </persoana>
+    <persoana id="2">
+        <nume>Becali</nume>
+        <prenume>George</prenume>
+        <varsta>65</varsta>
+        <data-nasterii>
+            <an>1958</an>
+            <luna>6</luna>
+            <ziua>25</ziua>
+        </data-nasterii>
+        <adresa>
+            <strada>Bulervadul Pipera</strada>
+            <numar>41</numar>
+            <localitatea>Voluntari</localitatea>
+            <judet>Ilfov</judet>
+            <tara>România</tara>
+        </adresa>
+    </persoana>
+    <persoana id="3">
+        <nume>Musk</nume>
+        <prenume>Elon Reeve</prenume>
+        <varsta>52</varsta>
+        <data-nasterii>
+            <an>1971</an>
+            <luna>6</luna>
+            <ziua>28</ziua>
+        </data-nasterii>
+        <adresa>
+            <strada>Long Street</strada>
+            <numar>29</numar>
+            <localitatea>Los Angeles</localitatea>
+            <judet>California</judet>
+            <tara>United States of America</tara>
+        </adresa>
+    </persoana>
+    <persoana id="4">
+        <nume>Ionescu</nume>
+        <prenume>Mircea</prenume>
+        <varsta>83</varsta>
+        <data-nasterii>
+            <an>1940</an>
+            <luna>10</luna>
+            <ziua>25</ziua>
+        </data-nasterii>
+        <adresa>
+            <strada>Bulevardul Magheru</strada>
+            <numar>29</numar>
+            <localitatea>Sector </localitatea>
+            <judet>București</judet>
             <tara>România</tara>
         </adresa>
     </persoana>

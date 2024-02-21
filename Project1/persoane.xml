@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE persoane SYSTEM "persoane.dtd">
-<persoane>
+<!-- <!DOCTYPE persoane SYSTEM "persoane.dtd"> -->
+<persoane xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="persoane.xsd">
     <persoana id="1">
         <nume>Popescu</nume>
         <prenume>Ion</prenume>

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE persoane SYSTEM "persoane.dtd">
 <persoane>
     <persoana id="1">
         <nume>Popescu</nume>
@@ -12,7 +13,7 @@
         <adresa>
             <strada>Bulevardul Copou</strada>
             <numar>42</numar>
-            <localitate>Iași</localitate>
+            <localitatea>Iași</localitatea>
             <judet>Iași</judet>
             <tara>România</tara>
         </adresa>

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Înregistrează-te</title>
+
+    <meta charset="utf-8" />
+</head>
+
+<body>
+    <header>
+        <h2>Meniu navigare</h2>
+        <a href="index.html">Acasă</a>
+        <a href="inregistreaza.html">Înregistrează-te</a>
+        <a href="video.html">Videoclipuri interesante</a>
+        <a href="despre.html">Despre</a>
+        <br />
+        <hr />
+    </header>
+
+    <h1>Înregistrează-te</h1>
+
+    <p>Creează-ți un cont pentru a participa în comunitatea <em>WizardVerse wiki</em></p>
+
+    <form>
+        <fieldset>
+            <legend>Informații generale</legend>
+            <label for="username">Nume utilizator</label>
+            <input type="text" id="username" />
+            <br />
+
+            <label for="password">Parola</label>
+            <input type="password" id="password" />
+            <br />
+
+            <label for="surname">Nume</label>
+            <input type="text" id="surname" />
+            <br />
+
+            <label for="name">Prenume</label>
+            <input type="text" id="name" />
+            <br />
+
+            <label for="email">Email</label>
+            <input type="email" id="email" />
+            <br />
+
+            <label for="phoneNumber">Număr de telefon</label>
+            <input type="tel" id="phoneNumber" />
+        </fieldset>
+
+        <fieldset>
+            <legend>Informații personale</legend>
+            <label for="genderSelector">Sex</label>
+            <select id="genderSelector">
+                <option value="M">Bărbat</option>
+                <option value="F">Femeie</option>
+                <option value="O">Altul</option>
+                <option value="U">Nu vreau să răspund</option>
+            </select>
+            <br />
+
+            <label for="favouriteDish">Mâncarea favorită</label>
+            <input list="foods" id="favouriteDish" />
+            <datalist>
+                <option value="Ciorbă"></option>
+                <option value="Cartofi prăjiți și ouă ochiuri"></option>
+                <option value="Mămăligă cu smântână"></option>
+                <option value="Pizza"></option>
+                <option value="Shaorma"></option>
+            </datalist>
+            <br />
+
+            <label for="birthDate">Data nașterii</label>
+            <input type="date" id="birthDate" />
+            <br />
+
+            <label for="birthTime">Ora nașterii</label>
+            <input type="time" id="birthTime" />
+            <br />
+
+            <label for="ageSlider">Vârsta</label>
+            <input type="range" id="ageSlider" min="13" max="120" step="1" value="18" />
+            <br />
+
+            <label for="webpageURL">Adresa paginii personale</label>
+            <input type="url" id="webpageURL" />
+            <br />
+
+            <label for="description">Descriere</label>
+            <textarea id="description"></textarea>
+        </fieldset>
+
+        <button disabled>Înregistrează</button>
+    </form>
+
+    <hr />
+    <footer>
+        <p>&#169; Contributorii <em>WizardVerse wiki</em></p>
+    </footer>
+</body>
+
+</html>

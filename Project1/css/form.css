@@ -1,0 +1,39 @@
+@import url('colors.css');
+
+form {
+    width: 50%;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+form>fieldset {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.4em;
+    margin: 8px;
+    border-color: black;
+}
+
+form>label {
+    align-self: flex-start;
+}
+
+form>fieldset>textarea {
+    height: 5em;
+}
+
+form>input {
+    align-self: flex-end;
+    flex-flow: row;
+}
+
+form>button {
+    color: var(--bg_h);
+    margin: 8px;
+}
+
+form>button:disabled {
+    background-color: var(--gray);
+    border-width: 0px;
+}

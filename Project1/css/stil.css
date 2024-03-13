@@ -1,0 +1,106 @@
+@import url('colors.css');
+
+hr {
+    color: var(--orange-dim);
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 2px solid rgb(160 160 160);
+}
+
+th,
+td {
+    border: 1px solid rgb(160 160 160);
+    padding: 4px 6px;
+}
+
+.center-container {
+    display: grid;
+    place-items: center;
+}
+
+body {
+    margin: auto;
+    background-color: var(--bg);
+    color: var(--fg);
+    max-width: 50%;
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+}
+
+img {
+    height: fit-content;
+    width: fit-content;
+    align-self: center;
+}
+
+.nav-items {
+    display: inline-block;
+    font-weight: bold;
+}
+
+.nav-items>a {
+    background-color: var(--blue-dim);
+    color: var(--bg_h);
+    text-decoration: none;
+
+    border-radius: 6px;
+    padding: 1em;
+}
+
+.nav-items>a:visited {
+    color: var(--bg_h);
+}
+
+.nav-items>a:hover {
+    background-color: var(--blue);
+}
+
+.nav-items::selection,
+.nav-items>a::selection {
+    background-color: none;
+}
+
+.crazy {
+    transform: rotate3d(2, -10, 1, 45deg);
+}
+
+.gradient-text {
+    font-style: italic;
+    background: linear-gradient(to right, var(--blue), var(--green), var(--orange));
+    color: var(--bg);
+    transform: rotate(30deg);
+    border: var(--purple) 12px;
+    width: 50px;
+    animation-duration: 10s;
+    animation-name: slidein;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+@keyframes slidein {
+    from {
+        margin-left: 100%;
+        width: 300%;
+    }
+
+    to {
+        margin-left: 0%;
+        width: 100%;
+    }
+}
+
+a {
+    color: var(--blue);
+}
+
+a:visited {
+    color: var(--red);
+}
+
+header {
+    place-self: center;
+}

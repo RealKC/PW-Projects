@@ -31,6 +31,12 @@ body {
     flex-direction: column;
 }
 
+@media (max-width: 800px) {
+    body {
+        max-width: 95%;
+    }
+}
+
 img {
     height: fit-content;
     width: fit-content;
@@ -42,6 +48,7 @@ img {
     font-weight: bold;
 }
 
+
 .nav-items>a {
     background-color: var(--blue-dim);
     color: var(--bg_h);
@@ -49,6 +56,20 @@ img {
 
     border-radius: 6px;
     padding: 1em;
+}
+
+@media (max-width: 800px) {
+    .nav-items {
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .nav-items>a {
+        margin: 0.2em;
+        align-self: center;
+    }
 }
 
 .nav-items>a:visited {
@@ -61,7 +82,13 @@ img {
 
 .nav-items::selection,
 .nav-items>a::selection {
-    background-color: none;
+    background-color: unset;
+}
+
+.nav-items>.selected {
+    background-color: unset;
+    background: linear-gradient(to right, var(--blue-dim), var(--blue), var(--green));
+    pointer-events: none;
 }
 
 .crazy {
@@ -103,4 +130,44 @@ a:visited {
 
 header {
     place-self: center;
+}
+
+.run-away {
+    transition-property: rotate;
+    transition-duration: 2s;
+}
+
+.run-away:hover {
+    rotate: 180deg;
+}
+
+.video-list {
+    align-self: center;
+    display: flex;
+    flex-direction: column;
+    flex: 500px;
+}
+
+.video-list>iframe {
+    align-self: baseline;
+    height: auto;
+    flex: 2;
+}
+
+.video-list>iframe:nth-of-type(2) {
+    flex: 4
+}
+
+@media print {
+    nav {
+        display: none;
+    }
+
+    a {
+        color: unset;
+    }
+
+    a:visited {
+        color: unset;
+    }
 }

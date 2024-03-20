@@ -58,13 +58,13 @@ function initializeSection2() {
         const x = (event.x - rect.left) * canvas.width / rect.width;
         const y = (event.y - rect.top) * canvas.height / rect.height;
         if (firstCoordX) {
-            console.log(`stroking rect: ${firstCoordX} ${firstCoordY}, w=${x - firstCoordX}, h=${y + firstCoordY}`)
+            ctx.fillRect(firstCoordX, firstCoordY, x - firstCoordX, y - firstCoordY);
             ctx.strokeRect(firstCoordX, firstCoordY, x - firstCoordX, y - firstCoordY);
             firstCoordX = null;
             firstCoordY = null;
         } else {
             firstCoordX = x;
-            firstCoordY = x;
+            firstCoordY = y;
         }
     });
 }

@@ -174,7 +174,15 @@ header {
 
 aside {
     float: left;
-    width: 30%;
+    width: fit-content;
+    background-color: var(--bg_h);
+    border-radius: 12px;
+    padding: 2em;
+    margin: 2em;
+}
+
+aside a:visited {
+    color: var(--blue);
 }
 
 .extra-margins {

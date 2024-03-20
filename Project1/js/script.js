@@ -29,6 +29,16 @@ Vă aflați pe pagina: ${location.pathname}.
 Timpul curent este: <div id="section-1-time">${dateFormat.format(now)}</div>
     `;
 
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition((position) => {
+            element.innerHTML += `<br /> Coordonatele tale GPS sunt: ${position.coords.latitude} lat, ${position.coords.longitude} long`;
+
+            if (position.coords.altitude) {
+                element.innerHTML += `și te afli la o altitudine de ${position.coords.altitude} metri`
+            }
+        });
+    }
+
     setInterval(() => {
         document.getElementById("section-1-time").textContent = dateFormat.format(new Date());
     }, 1000)

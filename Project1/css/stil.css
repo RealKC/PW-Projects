@@ -189,3 +189,14 @@ aside {
 #section-1-time {
     display: inline;
 }
+
+canvas#jspaint {
+    width: 480px;
+    height: 480px;
+    margin: 1em;
+}
+
+.vertical {
+    display: flex;
+    flex-direction: column;
+}

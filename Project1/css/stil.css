@@ -200,3 +200,8 @@ canvas#jspaint {
     display: flex;
     flex-direction: column;
 }
+
+.s3-cell {
+    width: 50px;
+    height: 25px;
+}

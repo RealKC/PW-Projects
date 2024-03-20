@@ -28,7 +28,12 @@ form>input {
     flex-flow: row;
 }
 
-form>button {
+form>button,
+form>fieldset>button {
+    background-color: var(--orange);
+    border-width: 1px;
+    border-color: var(--orange);
+    border-radius: 6px;
     color: var(--bg_h);
     margin: 8px;
 }

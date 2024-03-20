@@ -2,9 +2,10 @@ window.addEventListener("load", () => {
     initializeSidebar();
     initializeSection1();
     initializeSection2();
+    initializeSection3();
 });
 
-const NUMBER_OF_SECTIONS = 2;
+const NUMBER_OF_SECTIONS = 3;
 
 function initializeSidebar() {
     for (let i = 0; i < NUMBER_OF_SECTIONS; ++i) {
@@ -67,4 +68,36 @@ function initializeSection2() {
             firstCoordY = y;
         }
     });
+}
+
+function initializeSection3() {
+    for (const type of ["col", "row"]) {
+        document.getElementById(`section-3-btn-${type}`).onclick = () => section3Insert(type);
+    }
+    document.getElementById("section-3-pos").value = "0";
+}
+
+function section3Insert(mode) {
+    let position = parseInt(document.getElementById("section-3-pos").value);
+    let color = document.getElementById("section-3-color").value;
+    /** @type {HTMLTableElement} */
+    let table = document.getElementById("section-3-table");
+    switch (mode) {
+        case "col": {
+            const cell = row.insertCell(position + 2);
+            cell.style.backgroundColor = color;
+            cell.classList.add("s3-cell");
+            break;
+        }
+        case "row": {
+            const row = table.insertRow(position + 1);
+            const cell = row.insertCell(0);
+            cell.style.backgroundColor = color;
+            cell.classList.add("s3-cell");
+            break;
+        }
+        default:
+            console.error(`Unknown mode: '${mode}'`);
+            break;
+    }
 }

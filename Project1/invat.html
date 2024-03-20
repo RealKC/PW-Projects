@@ -6,6 +6,7 @@
 
     <meta charset="utf-8" />
     <link href="/css/stil.css" rel="stylesheet" />
+    <link href="/css/form.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -33,6 +34,7 @@
         <aside class="">
             <a href="#section-1" id="section-1-button" class="section-title"></a>
             <a href="#section-2" id="section-2-button" class="section-title"></a>
+            <a href="#section-3" id="section-3-button" class="section-title"></a>
         </aside>
 
         <h3 id="section-1" class="section-title">Informații despre browser-ul tău</h3>
@@ -45,9 +47,22 @@
             <label>Culoare marginilor <input type="color" id="section-2-stroke" value="#000000" /></label>
             <canvas id="jspaint"></canvas>
         </div>
+
+        <h3 id="section-3" class="section-title">Tabel</h3>
+        <form>
+            <fieldset>
+                <label for="section-3-pos">Poziția: </label>
+                <input type="number" id="section-3-pos" />
+                <label for="section-3-color">Culoare de fundal: </label>
+                <input type="color" id="section-3-color" />
+                <button type="button" id="section-3-btn-row">Inserați un rând</button>
+                <button type="button" id="section-3-btn-col">Inserați o coloană</button>
+            </fieldset>
+        </form>
+        <table id="section-3-table">
+            <tr id="section-3-table-head"></tr>
+        </table>
     </div>
-
-
     <footer>
         <hr />
         <p>&#169; Contributorii <em>WizardVerse wiki</em></p>

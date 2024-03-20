@@ -171,3 +171,21 @@ header {
         color: unset;
     }
 }
+
+aside {
+    float: left;
+    width: 30%;
+}
+
+.extra-margins {
+    margin-top: 2em;
+}
+
+.section-title {
+    display: list-item;
+    list-style: upper-roman;
+}
+
+#section-1-time {
+    display: inline;
+}

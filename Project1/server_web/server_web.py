@@ -39,7 +39,13 @@ def client_supports_gzip(request_headers: str) -> bool:
     return request_headers[accept_encoding_start:accept_encoding_start+accept_encoding_end].find('gzip') != -1
 
 def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_gzip: bool):
-    log.info(f'Client supports gzip? {supports_gzip}')
+    if len(path) == 0 or path == '/':
+        redirect = Response()
+        redirect.set_301_moved_permanently()
+        redirect.append_header('Location', '/index.html')
+        redirect.send_to(client)
+        return
+
     for filename in os.listdir('../continut'):
         if filename == path:
             response = Response()
@@ -59,6 +65,7 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
 
     not_found = Response()
     not_found.set_404_not_found()
+    not_found.append_header('Content-Length', '0')
     not_found.send_to(client)
 
 def client_connection_handler(client_socket):

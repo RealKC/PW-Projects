@@ -8,6 +8,9 @@ class Response:
     def set_200_ok(self):
         self.data = b'HTTP/1.1 200 OK\r\n'
 
+    def set_301_moved_permanently(self):
+        self.data= b'HTTP/1.1 301 MOVED PERMANENTLY\r\n'
+
     def set_404_not_found(self):
         self.data = b'HTTP/1.1 404 NOT FOUND\r\n'
 

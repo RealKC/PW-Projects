@@ -25,12 +25,10 @@ class Response:
             self.append_header('Content-Length', len(gzipped))
             self.data += b'\r\n'
             self.data += gzipped
-            self.data += b'\r\n'
         else:
             self.append_header('Content-Length', len(body))
             self.data += b'\r\n'
             self.data += body
-            self.data += b'\r\n'
 
     def send_to(self, socket: socket.socket):
         socket.sendall(self.data)

@@ -58,8 +58,10 @@ def handle_get(client: socket.socket, path: str, supports_gzip: bool):
             response.set_200_ok()
             response.append_header('Content-Type', get_content_type(filename))
             with open(f'../continut/{filename}', 'rb') as file:
-                data = file.read()
-                response.append_header('Content-Length', len(data))
+                data, length = gzip_if_supported(file.read(), supports_gzip)
+                if supports_gzip:
+                    response.append_header('Content-Encoding', 'gzip')
+                response.append_header('Content-Length', length)
                 response.append_body(data)
             response.send_to(client)
             return
@@ -69,8 +71,10 @@ def handle_get(client: socket.socket, path: str, supports_gzip: bool):
             response.set_200_ok()
             response.append_header('Content-Type', get_content_type(path))
             with open(f'../continut/{path}', 'rb') as file:
-                data = file.read()
-                response.append_header('Content-Length', len(data))
+                data, length = gzip_if_supported(file.read(), supports_gzip)
+                if supports_gzip:
+                    response.append_header('Content-Encoding', 'gzip')
+                response.append_header('Content-Length', length)
                 response.append_body(data)
             response.send_to(client)
             return

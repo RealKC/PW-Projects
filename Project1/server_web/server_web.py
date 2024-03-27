@@ -1,3 +1,5 @@
+import gzip
+from io import BytesIO, StringIO
 import os
 import socket
 import logging
@@ -25,7 +27,31 @@ def get_content_type(path: str):
         return 'image/vnd.microsoft.icon'
     return 'application/octet-stream'
 
-def handle_get(client: socket.socket, path: str):
+def client_supports_gzip(request_headers: str) -> bool:
+    accept_encoding_start = request_headers.find('Accept-Encoding')
+    if accept_encoding_start == -1:
+        return False
+
+    accept_encoding_end = request_headers[accept_encoding_start:].find('\r\n')
+    # Malformed header so let's just say the client doesn't support gzip if it can't send correctly formed headers
+    if accept_encoding_end == -1:
+        return False
+
+    return request_headers[accept_encoding_start:accept_encoding_start+accept_encoding_end].find('gzip') != -1
+
+def gzip_if_supported(data: bytes, supports_gzip: bool) -> tuple[bytes, int]:
+    if supports_gzip:
+        out = BytesIO()
+        with gzip.GzipFile(fileobj=out, mode='wb') as f:
+            f.write(data)
+        return (out.getvalue(), len(out.getvalue()))
+    else:
+        return (data, len(data))
+
+
+
+def handle_get(client: socket.socket, path: str, supports_gzip: bool):
+    LOG.info(f'Client supports gzip? {supports_gzip}')
     for filename in os.listdir('../continut'):
         if filename == path:
             response = Response()
@@ -79,7 +105,7 @@ def main_loop(server_socket: socket.socket):
         (verb, path, _http_version) = get_request_data(first_line)
 
         if verb == 'GET':
-            handle_get(client_socket, path)
+            handle_get(client_socket, path, client_supports_gzip(request))
 
         client_socket.close()
 

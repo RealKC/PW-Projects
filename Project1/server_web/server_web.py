@@ -39,43 +39,22 @@ def client_supports_gzip(request_headers: str) -> bool:
 
     return request_headers[accept_encoding_start:accept_encoding_start+accept_encoding_end].find('gzip') != -1
 
-def gzip_if_supported(data: bytes, supports_gzip: bool) -> tuple[bytes, int]:
-    if supports_gzip:
-        out = BytesIO()
-        with gzip.GzipFile(fileobj=out, mode='wb') as f:
-            f.write(data)
-        return (out.getvalue(), len(out.getvalue()))
-    else:
-        return (data, len(data))
-
-
-
 def handle_get(client: socket.socket, path: str, supports_gzip: bool):
     LOG.info(f'Client supports gzip? {supports_gzip}')
     for filename in os.listdir('../continut'):
         if filename == path:
             response = Response()
             response.set_200_ok()
-            response.append_header('Content-Type', get_content_type(filename))
             with open(f'../continut/{filename}', 'rb') as file:
-                data, length = gzip_if_supported(file.read(), supports_gzip)
-                if supports_gzip:
-                    response.append_header('Content-Encoding', 'gzip')
-                response.append_header('Content-Length', length)
-                response.append_body(data)
+                response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
             response.send_to(client)
             return
         elif os.path.isdir(f'../continut/{filename}') and path.startswith(filename):
             LOG.info(f'returning data from a subdirectory: {filename} {path}')
             response = Response()
             response.set_200_ok()
-            response.append_header('Content-Type', get_content_type(path))
             with open(f'../continut/{path}', 'rb') as file:
-                data, length = gzip_if_supported(file.read(), supports_gzip)
-                if supports_gzip:
-                    response.append_header('Content-Encoding', 'gzip')
-                response.append_header('Content-Length', length)
-                response.append_body(data)
+                response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
             response.send_to(client)
             return
 

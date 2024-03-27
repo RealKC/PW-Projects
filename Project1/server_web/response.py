@@ -1,3 +1,5 @@
+import gzip
+from io import BytesIO
 import socket
 
 class Response:
@@ -12,10 +14,23 @@ class Response:
     def append_header(self, header, value):
         self.data += f'{header}: {value}\r\n'.encode()
 
-    def append_body(self, body: bytes):
-        self.data += b'\r\n'
-        self.data += body
-        self.data += b'\r\n'
+    def append_body(self, content_type: str, body: bytes, supports_gzip: bool):
+        self.append_header('Content-Type', content_type)
+        if supports_gzip:
+            out = BytesIO()
+            with gzip.GzipFile(fileobj=out, mode='wb') as f:
+                f.write(body)
+            gzipped = out.getvalue()
+            self.append_header('Content-Encoding', 'gzip')
+            self.append_header('Content-Length', len(gzipped))
+            self.data += b'\r\n'
+            self.data += gzipped
+            self.data += b'\r\n'
+        else:
+            self.append_header('Content-Length', len(body))
+            self.data += b'\r\n'
+            self.data += body
+            self.data += b'\r\n'
 
     def send_to(self, socket: socket.socket):
         socket.sendall(self.data)

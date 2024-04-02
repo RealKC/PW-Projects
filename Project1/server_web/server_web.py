@@ -1,5 +1,6 @@
-import socket
 import logging
+import mimetypes
+import socket
 import threading
 
 from response import Response
@@ -13,17 +14,10 @@ def get_request_data(start_line):
     return (components[0], components[1][1:], components[2])
 
 def get_content_type(path: str):
-    if path.endswith('.html'):
-        return 'text/html'
-    if path.endswith('.css'):
-        return 'text/css'
-    if path.endswith('.js'):
-        return 'text/javascript'
-    if path.endswith('.png'):
-        return 'image/png'
-    if path.endswith('.ico'):
-        return 'image/vnd.microsoft.icon'
-    return 'application/octet-stream'
+    (type, _encoding) = mimetypes.guess_type(path)
+    if type.startswith('text/'):
+        type += '; charset=utf-8'
+    return type
 
 def client_supports_gzip(request_headers: str) -> bool:
     accept_encoding_start = request_headers.find('Accept-Encoding')

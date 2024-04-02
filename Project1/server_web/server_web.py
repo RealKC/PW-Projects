@@ -46,27 +46,19 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
         redirect.send_to(client)
         return
 
-    for filename in os.listdir('../continut'):
-        if filename == path:
+    try:
+        with open(f'../continut/{path}', 'rb') as file:
+            log.info(f'returning resource: {path}')
             response = Response()
             response.set_200_ok()
-            with open(f'../continut/{filename}', 'rb') as file:
-                response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
+            response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
             response.send_to(client)
-            return
-        elif os.path.isdir(f'../continut/{filename}') and path.startswith(filename):
-            log.info(f'returning data from a subdirectory: {filename} {path}')
-            response = Response()
-            response.set_200_ok()
-            with open(f'../continut/{path}', 'rb') as file:
-                response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
-            response.send_to(client)
-            return
-
-    not_found = Response()
-    not_found.set_404_not_found()
-    not_found.append_header('Content-Length', '0')
-    not_found.send_to(client)
+    except FileNotFoundError:
+        log.info(f'client asked for non-existen {path}')
+        not_found = Response()
+        not_found.set_404_not_found()
+        not_found.append_header('Content-Length', '0')
+        not_found.send_to(client)
 
 def client_connection_handler(client_socket):
     request = ''

@@ -35,6 +35,7 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
     if len(path) == 0 or path == '/':
         redirect = Response()
         redirect.set_301_moved_permanently()
+        redirect.append_header('Server', Response.SERVER)
         redirect.append_header('Location', '/index.html')
         redirect.send_to(client)
         return
@@ -44,12 +45,14 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
             log.info(f'returning resource: {path}')
             response = Response()
             response.set_200_ok()
+            response.append_header('Server', Response.SERVER)
             response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
             response.send_to(client)
     except FileNotFoundError:
         log.info(f'client asked for non-existent {path}')
         not_found = Response()
         not_found.set_404_not_found()
+        not_found.append_header('Server', Response.SERVER)
         with open('../continut/404.html', 'rb') as file:
             page = file.read()
         not_found.append_body(body=page, content_type='text/html; charset=utf-8', supports_gzip=supports_gzip)

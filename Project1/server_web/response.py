@@ -3,6 +3,8 @@ from io import BytesIO
 import socket
 
 class Response:
+    SERVER = 'kyuubey / PW1'
+
     data: bytes = b''
 
     def set_200_ok(self):

@@ -213,3 +213,18 @@ canvas#jspaint {
     width: 50px;
     height: 25px;
 }
+
+.r404-huge-text {
+    font-size: 10em;
+}
+
+.r404-medium-text {
+    font-size: 2.25em;
+    text-align: center;
+}
+
+.gradient-colored-text {
+    background: linear-gradient(to bottom right, var(--blue), var(--orange));
+    background-clip: text;
+    color: transparent;
+}

@@ -1,4 +1,3 @@
-import os
 import socket
 import logging
 import threading
@@ -54,10 +53,12 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
             response.append_body(body=file.read(), content_type=get_content_type(path), supports_gzip=supports_gzip)
             response.send_to(client)
     except FileNotFoundError:
-        log.info(f'client asked for non-existen {path}')
+        log.info(f'client asked for non-existent {path}')
         not_found = Response()
         not_found.set_404_not_found()
-        not_found.append_header('Content-Length', '0')
+        with open('../continut/404.html', 'rb') as file:
+            page = file.read()
+        not_found.append_body(body=page, content_type='text/html; charset=utf-8', supports_gzip=supports_gzip)
         not_found.send_to(client)
 
 def client_connection_handler(client_socket):

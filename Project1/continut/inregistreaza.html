@@ -1,103 +1,65 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Înregistrează-te</title>
-
-    <meta charset="utf-8" />
-    <link href="/css/stil.css" rel="stylesheet" />
-    <link href="/css/form.css" rel="stylesheet" />
-</head>
-
-<body>
-    <div class="center-container">
-        <h1>Înregistrează-te</h1>
-    </div>
-    <nav>
-        <div class="center-container">
-            <div class="nav-items">
-                <a href="index.html">Acasă</a>
-                <a href="inregistreaza.html" class="selected">Înregistrează-te</a>
-                <a href="video.html">Videoclipuri interesante</a>
-                <a href="invat.html">Învăț</a>
-                <a href="desen.html">Desen</a>
-                <a href="despre.html">Despre</a>
-            </div>
-        </div>
-        <br />
-        <hr />
-    </nav>
-
-    <div class="center-container">
-        <p>Creează-ți un cont pentru a participa în comunitatea <em>WizardVerse wiki</em></p>
-    </div>
+<div class="center-container">
+    <p>Creează-ți un cont pentru a participa în comunitatea <em>WizardVerse wiki</em></p>
+</div>
 
 
-    <form>
-        <fieldset>
-            <legend>Informații generale</legend>
-            <label for="username">Nume utilizator</label>
-            <input type="text" id="username" />
+<form>
+    <fieldset>
+        <legend>Informații generale</legend>
+        <label for="username">Nume utilizator</label>
+        <input type="text" id="username" />
 
-            <label for="password">Parola</label>
-            <input type="password" id="password" />
+        <label for="password">Parola</label>
+        <input type="password" id="password" />
 
-            <label for="surname">Nume</label>
-            <input type="text" id="surname" />
+        <label for="surname">Nume</label>
+        <input type="text" id="surname" />
 
-            <label for="name">Prenume</label>
-            <input type="text" id="name" />
+        <label for="name">Prenume</label>
+        <input type="text" id="name" />
 
-            <label for="email">Email</label>
-            <input type="email" id="email" />
+        <label for="email">Email</label>
+        <input type="email" id="email" />
 
-            <label for="phoneNumber">Număr de telefon</label>
-            <input type="tel" id="phoneNumber" />
-        </fieldset>
+        <label for="phoneNumber">Număr de telefon</label>
+        <input type="tel" id="phoneNumber" />
+    </fieldset>
 
-        <fieldset>
-            <legend>Informații personale</legend>
-            <label for="genderSelector">Sex</label>
-            <select id="genderSelector">
-                <option value="M">Bărbat</option>
-                <option value="F">Femeie</option>
-                <option value="O">Altul</option>
-                <option value="U">Nu vreau să răspund</option>
-            </select>
+    <fieldset>
+        <legend>Informații personale</legend>
+        <label for="genderSelector">Sex</label>
+        <select id="genderSelector">
+            <option value="M">Bărbat</option>
+            <option value="F">Femeie</option>
+            <option value="O">Altul</option>
+            <option value="U">Nu vreau să răspund</option>
+        </select>
 
-            <label for="favouriteDish">Mâncarea favorită</label>
-            <input list="foods" id="favouriteDish" />
-            <datalist>
-                <option value="Ciorbă"></option>
-                <option value="Cartofi prăjiți și ouă ochiuri"></option>
-                <option value="Mămăligă cu smântână"></option>
-                <option value="Pizza"></option>
-                <option value="Shaorma"></option>
-            </datalist>
+        <label for="favouriteDish">Mâncarea favorită</label>
+        <input list="foods" id="favouriteDish" />
+        <datalist>
+            <option value="Ciorbă"></option>
+            <option value="Cartofi prăjiți și ouă ochiuri"></option>
+            <option value="Mămăligă cu smântână"></option>
+            <option value="Pizza"></option>
+            <option value="Shaorma"></option>
+        </datalist>
 
-            <label for="birthDate">Data nașterii</label>
-            <input type="date" id="birthDate" />
+        <label for="birthDate">Data nașterii</label>
+        <input type="date" id="birthDate" />
 
-            <label for="birthTime">Ora nașterii</label>
-            <input type="time" id="birthTime" />
+        <label for="birthTime">Ora nașterii</label>
+        <input type="time" id="birthTime" />
 
-            <label for="ageSlider">Vârsta</label>
-            <input type="range" id="ageSlider" min="13" max="120" step="1" value="18" />
+        <label for="ageSlider">Vârsta</label>
+        <input type="range" id="ageSlider" min="13" max="120" step="1" value="18" />
 
-            <label for="webpageURL">Adresa paginii personale</label>
-            <input type="url" id="webpageURL" />
+        <label for="webpageURL">Adresa paginii personale</label>
+        <input type="url" id="webpageURL" />
 
-            <label for="description">Descriere</label>
-            <textarea id="description"></textarea>
-        </fieldset>
+        <label for="description">Descriere</label>
+        <textarea id="description"></textarea>
+    </fieldset>
 
-        <button disabled>Înregistrează</button>
-    </form>
-
-    <footer>
-        <hr />
-        <p>&#169; Contributorii <em>WizardVerse wiki</em></p>
-    </footer>
-</body>
-
-</html>
+    <button disabled>Înregistrează</button>
+</form>

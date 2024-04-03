@@ -1,73 +1,36 @@
-<!DOCTYPE html>
-<html>
+<script type="module" src="js/invat.js"></script>
 
-<head>
-    <title>Acasă</title>
+<div class="extra-margins">
+    <aside class="">
+        Secțiuni
+        <a href="#section-1" id="section-1-button" class="section-title"></a>
+        <a href="#section-2" id="section-2-button" class="section-title"></a>
+        <a href="#section-3" id="section-3-button" class="section-title"></a>
+    </aside>
 
-    <meta charset="utf-8" />
-    <link href="/css/stil.css" rel="stylesheet" />
-    <link href="/css/form.css" rel="stylesheet" />
-</head>
+    <h3 id="section-1" class="section-title">Informații despre browser-ul tău</h3>
 
-<body>
-    <script type="module" src="js/invat.js"></script>
-    <div class="center-container">
-        <h1>WizardVerse Wiki - Învăț</h1>
+    <p id="section-1-js"></p>
+
+    <h3 id="section-2" class="section-title">Desenează scena ta favorită</h3>
+    <div class="vertical">
+        <label>Culoare de umplere <input type="color" id="section-2-fill" value="#000000" /></label>
+        <label>Culoare marginilor <input type="color" id="section-2-stroke" value="#000000" /></label>
+        <canvas id="jspaint"></canvas>
     </div>
 
-    <nav>
-        <div class="center-container">
-            <div class="nav-items">
-                <a href="index.html">Acasă</a>
-                <a href="inregistreaza.html">Înregistrează-te</a>
-                <a href="video.html">Videoclipuri interesante</a>
-                <a href="invat.html" class="selected">Învăț</a>
-                <a href="desen.html">Desen</a>
-                <a href="despre.html">Despre</a>
-            </div>
-        </div>
-        <br />
-        <hr />
-    </nav>
-
-    <div class="extra-margins">
-        <aside class="">
-            Secțiuni
-            <a href="#section-1" id="section-1-button" class="section-title"></a>
-            <a href="#section-2" id="section-2-button" class="section-title"></a>
-            <a href="#section-3" id="section-3-button" class="section-title"></a>
-        </aside>
-
-        <h3 id="section-1" class="section-title">Informații despre browser-ul tău</h3>
-
-        <p id="section-1-js"></p>
-
-        <h3 id="section-2" class="section-title">Desenează scena ta favorită</h3>
-        <div class="vertical">
-            <label>Culoare de umplere <input type="color" id="section-2-fill" value="#000000" /></label>
-            <label>Culoare marginilor <input type="color" id="section-2-stroke" value="#000000" /></label>
-            <canvas id="jspaint"></canvas>
-        </div>
-
-        <h3 id="section-3" class="section-title">Tabel</h3>
-        <form>
-            <fieldset>
-                <label for="section-3-pos">Poziția: </label>
-                <input type="number" id="section-3-pos" />
-                <label for="section-3-color">Culoare de fundal: </label>
-                <input type="color" id="section-3-color" />
-                <button type="button" id="section-3-btn-row">Inserați un rând</button>
-                <button type="button" id="section-3-btn-col">Inserați o coloană</button>
-            </fieldset>
-        </form>
-        <table id="section-3-table">
-            <tr id="section-3-table-head"></tr>
-        </table>
-    </div>
-    <footer>
-        <hr />
-        <p>&#169; Contributorii <em>WizardVerse wiki</em></p>
-    </footer>
-</body>
-
-</html>
+    <h3 id="section-3" class="section-title">Tabel</h3>
+    <form>
+        <fieldset>
+            <label for="section-3-pos">Poziția: </label>
+            <input type="number" id="section-3-pos" />
+            <label for="section-3-color">Culoare de fundal: </label>
+            <input type="color" id="section-3-color" />
+            <button type="button" id="section-3-btn-row">Inserați un rând</button>
+            <button type="button" id="section-3-btn-col">Inserați o coloană</button>
+        </fieldset>
+    </form>
+    <table id="section-3-table">
+        <tr id="section-3-table-head"></tr>
+    </table>
+</div>

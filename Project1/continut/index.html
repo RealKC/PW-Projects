@@ -6,22 +6,25 @@
 
     <meta charset="utf-8" />
     <link href="/css/stil.css" rel="stylesheet" />
+    <link href="/css/form.css" rel="stylesheet" />
 </head>
 
 <body>
+    <script src="/js/script.js"></script>
+
     <div class="center-container">
-        <h1>WizardVerse Wiki - Acasă</h1>
+        <h1 id="page-title">WizardVerse Wiki - Acasă</h1>
     </div>
 
     <nav>
         <div class="center-container">
             <div class="nav-items">
-                <a href="index.html" class="selected">Acasă</a>
-                <a href="inregistreaza.html">Înregistrează-te</a>
-                <a href="video.html">Videoclipuri interesante</a>
-                <a href="invat.html">Învăț</a>
-                <a href="desen.html">Desen</a>
-                <a href="despre.html">Despre</a>
+                <a onclick="changePage('acasa', 'home', 'Acasă')" id="home">Acasă</a>
+                <a onclick="changePage('inregistreaza', 'register', 'Înregistrează-te')" id="register">Înregistrează-te</a>
+                <a onclick="changePage('video', 'video', 'Videoclipuri interesante')" id="video">Videoclipuri interesante</a>
+                <a onclick="changePage('invat', 'learn', 'Învăț')" id="learn">Învăț</a>
+                <a onclick="changePage('desen', 'drawing', 'Desen')" id="drawing">Desen</a>
+                <a onclick="changePage('despre', 'about', 'Despre')" , id="about">Despre</a>
             </div>
         </div>
         <br />

@@ -1,9 +1,9 @@
-window.addEventListener("load", () => {
+function main() {
     initializeSidebar();
     initializeSection1();
     initializeSection2();
     initializeSection3();
-});
+}
 
 const NUMBER_OF_SECTIONS = 3;
 

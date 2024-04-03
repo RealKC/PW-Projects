@@ -1,4 +1,4 @@
 #!/usr/bin/env sh
 
 cd $(dirname "$0")
-python server_web.py
+python server_web.py ../continut

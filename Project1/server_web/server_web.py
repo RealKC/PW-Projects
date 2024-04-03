@@ -1,3 +1,4 @@
+from argparse import ArgumentParser
 import logging
 import mimetypes
 import socket
@@ -8,6 +9,8 @@ from response import Response
 logging.basicConfig(level=logging.INFO)
 
 LOG = logging.getLogger(f'{__name__}/web')
+
+CONTENT_DIRECTORY: str
 
 def get_request_data(start_line):
     components = start_line.split(' ')
@@ -41,7 +44,7 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
         return
 
     try:
-        with open(f'../continut/{path}', 'rb') as file:
+        with open(f'{CONTENT_DIRECTORY}/{path}', 'rb') as file:
             log.info(f'returning resource: {path}')
             response = Response()
             response.set_200_ok()
@@ -53,7 +56,7 @@ def handle_get(log: logging.Logger, client: socket.socket, path: str, supports_g
         not_found = Response()
         not_found.set_404_not_found()
         not_found.append_header('Server', Response.SERVER)
-        with open('../continut/404.html', 'rb') as file:
+        with open(f'{CONTENT_DIRECTORY}/404.html', 'rb') as file:
             page = file.read()
         not_found.append_body(body=page, content_type='text/html; charset=utf-8', supports_gzip=supports_gzip)
         not_found.send_to(client)
@@ -103,6 +106,14 @@ def main_loop(server_socket: socket.socket):
 
 
 if __name__ == '__main__':
+    args_parser = ArgumentParser(
+        prog='kyuubey',
+        description='Server web for PW'
+    )
+    args_parser.add_argument('content_directory')
+    args = args_parser.parse_args()
+    CONTENT_DIRECTORY = args.content_directory
+
     server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     server_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
     server_socket.bind(('', 5678))

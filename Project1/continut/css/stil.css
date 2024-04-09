@@ -43,9 +43,16 @@ img {
     align-self: center;
 }
 
+div#script-host {
+    display: none;
+}
+
 .nav-items {
-    display: inline-block;
+    display: flex;
     font-weight: bold;
+    justify-content: center;
+    align-items: baseline;
+    flex-wrap: wrap;
 }
 
 
@@ -54,6 +61,7 @@ img {
     color: var(--bg_h);
     text-decoration: none;
 
+    margin: 0.2em;
     border-radius: 6px;
     padding: 1em;
 }

@@ -2,5 +2,19 @@
     {
         "username": "test",
         "password": "test"
+    },
+    {
+        "username": "aa",
+        "password": "a",
+        "surname": "aa",
+        "name": "a",
+        "email": "a",
+        "phoneNumber": "a",
+        "favouriteDish": "a",
+        "birthDate": "2024-04-09",
+        "birthTime": "23:02",
+        "ageSlider": "18",
+        "webpageURL": "as",
+        "foods": "a"
     }
 ]

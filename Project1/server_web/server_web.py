@@ -1,9 +1,10 @@
-from argparse import ArgumentParser
+import api
 import logging
 import mimetypes
 import socket
 import threading
 
+from argparse import ArgumentParser
 from response import Response
 
 logging.basicConfig(level=logging.INFO)
@@ -82,6 +83,9 @@ def client_connection_handler(client_socket):
     (verb, path, _http_version) = get_request_data(first_line)
 
     log.name += f' ~> {verb} {path}'
+
+    if path.startswith('api/') or path.startswith('/api'):
+        api.handle(log, client_socket, verb, path[4:], request[request.find('\r\n\r\n'):], CONTENT_DIRECTORY)
 
     if verb == 'GET':
         handle_get(log, client_socket, path, client_supports_gzip(request))

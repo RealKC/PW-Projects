@@ -1,8 +1,8 @@
 import api
 import logging
 import mimetypes
+import multiprocessing
 import socket
-import threading
 
 from argparse import ArgumentParser
 from response import Response
@@ -66,7 +66,7 @@ def client_connection_handler(client_socket):
     request = ''
     first_line = ''
 
-    log = logging.getLogger(f'{__name__}/web/{threading.current_thread().name}');
+    log = logging.getLogger(f'{__name__}/web/{multiprocessing.current_process().name}');
 
     while True:
         data = client_socket.recv(1024)
@@ -100,13 +100,15 @@ def main_loop(server_socket: socket.socket):
         LOG.info('Serverul asculta potentiali clienti')
 
         (client_socket, address) = server_socket.accept()
+        client_socket.set_inheritable(True)
         LOG.info(f'S-a conectat clientul cu adresa: {address}')
 
-        threading.Thread(
+        multiprocessing.Process(
             target=client_connection_handler,
             args=[client_socket],
-            name=f'Client {address}'
+            name=f'Client {address}',
         ).start()
+        client_socket.close()
 
 
 if __name__ == '__main__':

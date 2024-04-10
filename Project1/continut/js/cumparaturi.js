@@ -15,6 +15,91 @@ const PRODUCTS_KEY = 'products';
 const SHOPPING_CART_HOST = 'shopping-cart-host';
 const worker = new Worker('js/cumparaturi-worker.js');
 
+
+
+let backend = 'localStorage;'
+const LOCAL_STORAGE = 'localStorage';
+const INDEXED_DB = 'IndexedDB';
+
+class StorageBackend {
+    /**
+     * @returns {StorageBackend}
+     */
+    static get instance() {
+        switch (backend) {
+            case LOCAL_STORAGE:
+                return new LocalStorageBackend();
+            case INDEXED_DB:
+                return new IndexedDBBackend();
+            default:
+                throw new Error(`Invalid backend: ${backend}`);
+        }
+    }
+
+    /**
+     * Stores a product in storage
+     *
+     * @param {Product} item
+     */
+    addProduct(item) {
+        throw Error('Unimplemented `storeItem`');
+    }
+
+    /**
+     * Gets all products from storage
+     *
+     * @returns {Product[]}
+     */
+    getAllProducts() {
+        throw Error('Unimplemented `getItem`')
+    }
+}
+
+class LocalStorageBackend extends StorageBackend {
+    addProduct(item) {
+        const products = this.getAllProducts();
+        products.append(item);
+        localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    }
+
+    getAllProducts() {
+        const rawProducts = localStorage.getItem(PRODUCTS_KEY);
+        const products = rawProducts != null ? JSON.parse(rawProducts) : [];
+
+        return products;
+    }
+}
+
+class IndexedDBBackend extends StorageBackend {
+    constructor() {
+        const request = window.indexedDB.open('ProductsStorage');
+        request.onsuccess = (event) => {
+            /** @type {IDBDatabase} */
+            const db = event.target.result;
+            this.db = db;
+        };
+        request.onerror = (event) => {
+            console.error(`Failed to open IndexDB: ${event.target.errorCode}`);
+        };
+        request.onupgradeneeded = (event) => {
+            this.db = event.target.result;
+            this.db.createObjectStore('products', { keyPath: 'id', autoIncrement: true });
+        };
+    }
+
+    addProduct(item) {
+        const transaction = this.db.transaction(['customers'], 'readwrite');
+        transaction.objectStore('products').add(item);
+    }
+
+    getAllProducts() {
+        return this
+            .db
+            .transaction(['customers'], 'readonly')
+            .getAll();
+    }
+}
+
 function main() {
     // If the user navigates away and returns, we want to keep showing them their cart
     populateTableWithInitialData();
@@ -32,6 +117,9 @@ function main() {
             row.insertCell(1).textContent = event.data.name;
             row.insertCell(2).textContent = event.data.quantity.toString();
         }
+    };
+    document.getElementById('storageBackendSelector').oninput = (event) => {
+        
     };
 }
 

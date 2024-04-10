@@ -32,5 +32,9 @@ function addProduct() {
 function getNewProductId(products) {
     products.sort((a, b) => a.id - b.id);
 
-    return products[products.length - 1].id;
+    if (products.length === 0) {
+        return 1;
+    }
+
+    return products[products.length - 1].id + 1;
 }

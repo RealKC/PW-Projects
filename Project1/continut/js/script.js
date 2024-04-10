@@ -1,5 +1,7 @@
 let currentlySelectedItem = null;
 
+const loadedScripts = {};
+
 async function changePage(resource, selectedMenuItem, title, jsFile, jsFunction) {
     const page = await fetch(`${resource}.html`, {
         method: 'GET'
@@ -19,14 +21,19 @@ async function changePage(resource, selectedMenuItem, title, jsFile, jsFunction)
     titleElement.innerText = `WizardVerse Wiki - ${title}`
 
     if (jsFile) {
-        var scriptElement = document.createElement('script');
-        scriptElement.onload = function () {
-            console.log(`Script ${jsFile} loaded`);
-            if (jsFunction) {
-                window[jsFunction]();
+        let scriptElement = loadedScripts[jsFile];
+        if (loadedScripts[jsFile] == null) {
+            scriptElement = document.createElement('script');
+            scriptElement.onload = function () {
+                console.log(`Script ${jsFile} loaded`);
+                if (jsFunction) {
+                    window[jsFunction]();
+                }
             }
+            scriptElement.src = jsFile;
+            loadedScripts[jsFile] = scriptElement;
         }
-        scriptElement.src = jsFile;
+
         main.querySelector('#script-host').append(scriptElement);
     }
 }

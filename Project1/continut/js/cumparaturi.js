@@ -17,9 +17,10 @@ const worker = new Worker('js/cumparaturi-worker.js');
 
 
 
-let backend = 'localStorage;'
+let backend = 'localStorage';
 const LOCAL_STORAGE = 'localStorage';
 const INDEXED_DB = 'IndexedDB';
+
 
 class StorageBackend {
     /**
@@ -28,9 +29,9 @@ class StorageBackend {
     static get instance() {
         switch (backend) {
             case LOCAL_STORAGE:
-                return new LocalStorageBackend();
+                return localStorageBackend;
             case INDEXED_DB:
-                return new IndexedDBBackend();
+                return indexedDBBackend;
             default:
                 throw new Error(`Invalid backend: ${backend}`);
         }
@@ -48,7 +49,7 @@ class StorageBackend {
     /**
      * Gets all products from storage
      *
-     * @returns {Product[]}
+     * @returns {Promise<Product[]>}
      */
     getAllProducts() {
         throw Error('Unimplemented `getItem`')
@@ -66,17 +67,23 @@ class LocalStorageBackend extends StorageBackend {
         const rawProducts = localStorage.getItem(PRODUCTS_KEY);
         const products = rawProducts != null ? JSON.parse(rawProducts) : [];
 
-        return products;
+        return new Promise((resolve, _reject) => {
+            resolve(products);
+        });
     }
 }
 
 class IndexedDBBackend extends StorageBackend {
     constructor() {
+        super();
+
+        this.db = null;
+
         const request = window.indexedDB.open('ProductsStorage');
         request.onsuccess = (event) => {
-            /** @type {IDBDatabase} */
             const db = event.target.result;
             this.db = db;
+            console.log('success');
         };
         request.onerror = (event) => {
             console.error(`Failed to open IndexDB: ${event.target.errorCode}`);
@@ -88,30 +95,47 @@ class IndexedDBBackend extends StorageBackend {
     }
 
     addProduct(item) {
-        const transaction = this.db.transaction(['customers'], 'readwrite');
-        transaction.objectStore('products').add(item);
+        const transaction = this.db.transaction(['products'], 'readwrite');
+        transaction.objectStore('products').put(item);
     }
 
     getAllProducts() {
-        return this
-            .db
-            .transaction(['customers'], 'readonly')
-            .getAll();
+        return new Promise((resolve, _reject) => {
+            if (!this.db) {
+                resolve([]);
+                return;
+            }
+
+            const getAllTransaction = this
+                .db
+                .transaction(['products'], 'readonly')
+                .objectStore('products')
+                .getAll();
+
+            getAllTransaction.onsuccess = (event) => resolve(event.target.result)
+        });
     }
 }
+
+const localStorageBackend = new LocalStorageBackend();
+const indexedDBBackend = new IndexedDBBackend();
 
 function main() {
     // If the user navigates away and returns, we want to keep showing them their cart
     populateTableWithInitialData();
     worker.onmessage = (event) => {
         const emptyCart = document.querySelector(`#${SHOPPING_CART_HOST}>p`);
-        const products = getProducts();
+        const products = StorageBackend.instance.getAllProducts();
         if (emptyCart) {
             emptyCart.remove();
             createShoppingCartTable(products);
         } else {
             /** @type {HTMLTableElement} */
-            const table = document.querySelector(`#${SHOPPING_CART_HOST}>table`);
+            let table = document.querySelector(`#${SHOPPING_CART_HOST}>table`);
+            if (table === null) {
+                table = document.createElement('table');
+                document.querySelector(`#${SHOPPING_CART_HOST}`).appendChild(table);
+            }
             const row = table.insertRow(products.length);
             row.insertCell(0).textContent = event.data.id.toString();
             row.insertCell(1).textContent = event.data.name;
@@ -119,19 +143,23 @@ function main() {
         }
     };
     document.getElementById('storageBackendSelector').oninput = (event) => {
-        
+        if (backend !== event.target.value) {
+            document.querySelector(`#${SHOPPING_CART_HOST}>table`)?.remove();
+            backend = event.target.value;
+            createShoppingCartTable(StorageBackend.instance.getAllProducts());
+        }
     };
 }
 
 function populateTableWithInitialData() {
-    const products = getProducts();
+    const products = StorageBackend.instance.getAllProducts();
 
     if (products.length === 0) {
         const yourCartIsEmpty = document.createElement('p');
         yourCartIsEmpty.textContent = 'Your cart is empty';
         document.getElementById(SHOPPING_CART_HOST).appendChild(yourCartIsEmpty);
     } else {
-        createShoppingCartTable(getProducts());
+        createShoppingCartTable(StorageBackend.instance.getAllProducts());
     }
 }
 
@@ -140,7 +168,7 @@ function populateTableWithInitialData() {
  *
  * @param {Product[]} products
  */
-function createShoppingCartTable(products) {
+async function createShoppingCartTable(products) {
     const table = document.createElement('table');
     const header = table.insertRow(0);
     header.insertCell(0).textContent = 'Nr.';
@@ -148,7 +176,7 @@ function createShoppingCartTable(products) {
     header.insertCell(2).textContent = 'Cantitate';
 
     let idx = 1;
-    for (const product of products) {
+    for (const product of await StorageBackend.instance.getAllProducts()) {
         const productRow = table.insertRow(idx);
         productRow.insertCell(0).textContent = product.id.toString();
         productRow.insertCell(1).textContent = product.name;
@@ -158,25 +186,12 @@ function createShoppingCartTable(products) {
     document.getElementById(SHOPPING_CART_HOST).appendChild(table);
 }
 
-/**
- * Retrieves products from localStorage
- * @returns {Product[]}
- */
-function getProducts() {
-    const rawProducts = localStorage.getItem(PRODUCTS_KEY);
-    const products = rawProducts != null ? JSON.parse(rawProducts) : [];
-
-    return products;
-}
-
-function addProduct() {
+async function addProduct() {
     const name = document.getElementById('productName').value;
     const quantity = Number.parseInt(document.getElementById('quantity').value);
 
-    const products = getProducts();
-    const product = new Product(getNewProductId(products), name, quantity);
-    products.push(product);
-    localStorage.setItem(PRODUCTS_KEY, JSON.stringify(products));
+    const product = new Product(getNewProductId(await StorageBackend.instance.getAllProducts()), name, quantity);
+    StorageBackend.instance.addProduct(product);
     worker.postMessage(product);
 }
 

@@ -1,10 +1,13 @@
 <div class="center-container">
     <p>Aici poți cumpăra stickere și alt merch neoficial</p>
 
-    <select name="storageBackend" id="storageBackendSelector">
-        <option value="localStorage">localStorage API</option>
-        <option value="IndexedDB">IndexedDB</option>
-    </select>
+    <div>
+        <label for="storageBackendSelector">Alege cum vrei să fie salvat coșul tău: </label>
+        <select name="storageBackend" id="storageBackendSelector">
+            <option value="localStorage">localStorage API</option>
+            <option value="IndexedDB">IndexedDB</option>
+        </select>
+    </div>
 
     <form>
         <fieldset>
@@ -19,10 +22,6 @@
 
     <div id="shopping-cart-host">
     </div>
-
-    <form>
-        <fieldset></fieldset>
-    </form>
 </div>
 
 

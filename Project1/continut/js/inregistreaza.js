@@ -1,4 +1,6 @@
 async function registerUser() {
+    const { ajax } = await import('./ajax.js');
+
     const inputElements = document.querySelectorAll('input');
 
     const requestObject = {}
@@ -18,7 +20,7 @@ async function registerUser() {
 
     requestObject['foods'] = document.getElementById('favouriteDish').value;
 
-    await fetch('/api/register-user', {
+    await ajax('/api/register-user', {
         method: "POST",
         headers: {
             "Content-Type": "application/json"

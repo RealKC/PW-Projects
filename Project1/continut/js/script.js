@@ -3,12 +3,13 @@ let currentlySelectedItem = null;
 const loadedScripts = {};
 
 async function changePage(resource, selectedMenuItem, title, jsFile, jsFunction) {
-    const page = await fetch(`${resource}.html`, {
+    const { ajax } = await import('./ajax.js');
+    const page = await ajax(`${resource}.html`, {
         method: 'GET'
     });
 
     let main = document.getElementById('content');
-    main.innerHTML = await page.text();
+    main.innerHTML = page.target.responseText;
 
     if (currentlySelectedItem != null) {
         document.getElementById(currentlySelectedItem).classList.remove('selected');

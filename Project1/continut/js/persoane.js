@@ -1,8 +1,9 @@
 async function loadPeople() {
-    const peopleRequest = await fetch('/resurse/persoane.xml', {
+    const { ajax } = await import('./ajax.js');
+    const peopleRequest = await ajax('/resurse/persoane.xml', {
         method: 'GET'
     });
-    const peopleText = await peopleRequest.text();
+    const peopleText = peopleRequest.target.responseText;
     const parser = new DOMParser();
     const xml = parser.parseFromString(peopleText, 'application/xml');
     const people = xml.querySelectorAll('persoana');

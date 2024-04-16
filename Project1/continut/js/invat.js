@@ -94,9 +94,17 @@ function section3Insert(mode) {
     let table = document.getElementById("section-3-table");
     switch (mode) {
         case "col": {
-            const cell = row.insertCell(position + 2);
-            cell.style.backgroundColor = color;
-            cell.classList.add("s3-cell");
+            for (const row of table.rows) {
+                const cell = row.insertCell(position);
+                cell.style.backgroundColor = color;
+                cell.classList.add("s3-cell");
+            }
+
+            if (table.rows.length === 0) {
+                // we call insert row but for an empty table it's the same as inserting a column
+                table.insertRow(0);
+            }
+
             break;
         }
         case "row": {
@@ -104,6 +112,7 @@ function section3Insert(mode) {
             const cell = row.insertCell(0);
             cell.style.backgroundColor = color;
             cell.classList.add("s3-cell");
+
             break;
         }
         default:

@@ -236,3 +236,7 @@ canvas#jspaint {
     background-clip: text;
     color: transparent;
 }
+
+#jspaint {
+    image-rendering: crisp-edges;
+}

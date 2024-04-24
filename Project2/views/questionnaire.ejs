@@ -1,0 +1,23 @@
+<%- contentFor('body') %>
+<p>Vă rog completați următorul chestionar:</p>
+
+<form action="/rezultat-chestionar" method="post">
+    <% for (const question of questions) { %>
+    <fieldset>
+        <legend>
+            <%= question.question %>
+        </legend>
+
+        <% for (let i = 0; i < question.variants.length; ++i) { %>
+        <input type="radio" id="<%= `${i}${question.id}` %>" name="<%= question.id %>" value="<%= i %>" required />
+        <label for="<%= `${i}${question.id}` %>">
+            <%= question.variants[i] %>
+        </label>
+        <br />
+        <% } %>
+    </fieldset>
+    <% } %>
+
+    <input type="submit" value="Trimite răspunsuri" />
+
+</form>

@@ -1,0 +1,105 @@
+[
+    {
+        "id": 1,
+        "question": "Ați consumat vreodata mâncare?",
+        "variants": [
+            "Da",
+            "Nu"
+        ],
+        "answer": 0
+    },
+    {
+        "id": 2,
+        "question": "Care dintre următoarele NU este un sortiment de brânză?",
+        "variants": [
+            "Parmegiano regiano",
+            "Mozzarella",
+            "Quattro fromagi",
+            "Romano"
+        ],
+        "answer": 3
+    },
+    {
+        "id": 3,
+        "question": "Ai găsit în dulap o pâine care este așa de mucegăită încât a devenit albastră. Ce reacție ai?",
+        "variants": [
+            "Ard casa",
+            "Arunc pâinea și dezinfectez dulapul",
+            "O curâț ca să o pot mânca",
+            "O pun la loc"
+        ],
+        "answer": 1
+    },
+    {
+        "id": 4,
+        "question": "Care dintre următoarele tipuri de carne poate fi gătită medium-rare?",
+        "variants": [
+            "pui",
+            "porc",
+            "aligator",
+            "vită"
+        ],
+        "answer": 3
+    },
+    {
+        "id": 5,
+        "question": "Care dintre următoarele alimente poate fi consumate în timpul postului?",
+        "variants": [
+            "ciocolată",
+            "ouă",
+            "pește",
+            "friptură"
+        ],
+        "answer": 2
+    },
+    {
+        "id": 1,
+        "question": "Poți consuma mâncare expirată?",
+        "variants": [
+            "Da",
+            "Nu"
+        ],
+        "answer": 1
+    },
+    {
+        "id": 7,
+        "question": "Dintre următoarele, care este un produs lactat?",
+        "variants": [
+            "margarină",
+            "tableta de glucoză",
+            "unt",
+            "zahăr pudră"
+        ],
+        "answer": 2
+    },
+    {
+        "id": 8,
+        "question": "Ce cantitate de lichide trebuie consumată într-o zi pentru a trăi o viață sănătoasă?",
+        "variants": [
+            "măcar 2 litri de lichide",
+            "5 energizante",
+            "nu e nevoie de lichide în viața omului"
+        ],
+        "answer": 0
+    },
+    {
+        "id": 9,
+        "question": "_ este carne roșie.",
+        "variants": [
+            "Peștele",
+            "Un piept de pui",
+            "Carnea de vită"
+        ],
+        "answer": 2
+    },
+    {
+        "id": 10,
+        "question": "_ este un fruct.",
+        "variants": [
+            "Carnea de porc",
+            "Cartoful",
+            "Mărul"
+        ],
+        "answer": 2
+    }
+]

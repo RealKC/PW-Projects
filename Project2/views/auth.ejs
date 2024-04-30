@@ -1,0 +1,35 @@
+<%- contentFor('header') %>
+<h1>Autentificare</h1>
+
+<%- contentFor('body') %>
+<div class="center-container" id="main-container">
+    <form method="post" action="/verify-auth">
+        <label>
+            Nume utilizator
+            <input type="text" name="username" />
+        </label>
+
+        <label>
+            Parola
+            <input type="password" name="password" />
+        </label>
+
+        <input type="submit" class="submit-button" value="Autentificare" />
+    </form>
+</div>
+
+<style>
+    #main-container {
+        margin-top: 2em;
+        margin-left: auto;
+        margin-right: auto;
+        padding: 1.5em;
+        border: 3px solid var(--blue);
+    }
+
+    label {
+        display: flex;
+        justify-content: space-between;
+        gap: 0.5em
+    }
+</style>

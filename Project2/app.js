@@ -17,7 +17,25 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set('layout extractStyles', true);
 
-app.get('/', (req, res) => res.send('Hello world'));
+app.get('/', (req, res) => {
+    res.locals = {
+        title: 'MițFood'
+    };
+    res.render('index');
+});
+
+app.get('/auth', (req, res) => {
+    res.locals = {
+        title: "Autentificare"
+    };
+    res.render('auth')
+});
+
+app.post('/verify-auth', (req, res) => {
+    console.log(`verify-auth ${req.body} ${req.body.username} ${req.body.password}`);
+
+    res.redirect('/');
+});
 
 app.get('/chestionar', (req, res) => {
     res.locals = {

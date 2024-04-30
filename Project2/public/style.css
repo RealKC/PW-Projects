@@ -70,3 +70,26 @@ button:disabled {
     background-color: var(--gray);
     border-width: 0px;
 }
+
+.center-container {
+    display: grid;
+    place-items: center;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    flex-shrink: 20;
+}
+
+.submit-button {
+    align-self: center;
+    padding: 0.25em 1em;
+}
+
+fieldset {
+    margin: 1em;
+    padding: 1em;
+    border-color: var(--blue);
+}

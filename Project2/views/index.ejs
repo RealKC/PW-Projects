@@ -2,4 +2,8 @@
 <h1><%= _locals.title %></h1>
 
 <%- contentFor('body') %>
+<% if (username !== undefined) { %>
+<p>Bine ai venit, <%= username %>! </p>
+<% } else { %>
 <p>Pagina de autentificare poate fi accesată dând click <a href="/auth">aici</a>.</p>
+<% } %>

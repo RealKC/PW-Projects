@@ -16,9 +16,19 @@
 
         <input type="submit" class="submit-button" value="Autentificare" />
     </form>
+
+    <% if (errorMessage !== undefined) { %>
+    <p class="error-message"> <%= errorMessage %> </p>
+    <% } %>
 </div>
 
 <style>
+    .error-message {
+        font-weight: bolder;
+        font-size: 1.25em;
+        color: var(--red);
+    }
+
     #main-container {
         margin-top: 2em;
         margin-left: auto;

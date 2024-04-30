@@ -20,11 +20,12 @@ app.set('layout extractStyles', true);
 
 app.get('/', (req, res) => {
     res.locals = {
-        title: 'MițFood'
+        title: 'MițFood',
+        user: req.cookies.user,
     };
 
     res.render('index', {
-        username: req.cookies.username,
+
     });
 });
 
@@ -40,13 +41,32 @@ app.get('/auth', (req, res) => {
 app.post('/verify-auth', (req, res) => {
     console.log(`verify-auth ${req.body} ${req.body.username} ${req.body.password}`);
 
-    if (req.body.username === 'user' && req.body.password === '1234') {
-        res.cookie('username', req.body.username);
-        res.redirect('/');
-    } else {
+    fs.readFile('utilizatori.json', (err, data) => {
+        if (err) {
+            throw err;
+        }
+
+        const users = JSON.parse(data);
+
+        res.clearCookie('errorMessage')
+
+        for (const user of users) {
+            if (req.body.username === user.username && req.body.password === user.password) {
+                delete user['password'];
+                res.cookie('user', user);
+                res.redirect('/');
+                return;
+            }
+        }
+
         res.cookie('errorMessage', 'Credențiale greșite');
         res.redirect('/auth');
-    }
+    });
+});
+
+app.post('/logout', (req, res) => {
+    res.clearCookie('user');
+    res.redirect('/');
 });
 
 app.get('/chestionar', (req, res) => {

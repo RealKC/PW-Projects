@@ -45,6 +45,19 @@ header {
     margin-bottom: 0.25em;
 }
 
+nav {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0px;
+    background-color: var(--bg);
+    z-index: 3;
+    border-bottom: 3px solid var(--blue);
+    margin-bottom: 0.25em;
+}
+
 body {
     background-color: var(--bg);
     color: var(--fg);

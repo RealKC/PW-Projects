@@ -12,6 +12,14 @@
     <%- header %>
 </header>
 
+<% if (_locals.user) { %>
+<nav>
+    Bine ai venit, <%= user.username %>!
+
+    <form method="post" action="/logout"><button type="submit">Logout</button></form>
+</nav>
+<% } %>
+
 <body>
     <%- body %>
 </body>

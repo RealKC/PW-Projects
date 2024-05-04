@@ -147,6 +147,45 @@ app.post('/add-to-cart', (req, res) => {
     res.redirect('/');
 });
 
+app.get('/view-cart', async (req, res) => {
+    const cart = new Promise((resolve, reject) => {
+        const cart = [...new Set(req.cookies.user.cart)];
+        if (cart.length > 0 && database) {
+            database.all(
+                sql`SELECT * FROM products WHERE id in (${cart.map(() => '?').join(', ')})`,
+                cart,
+                (err, rows) => {
+                    if (err) {
+                        console.error(`Got SQL error trying to get cart: ${err}`);
+                        resolve([]);
+                        return;
+                    }
+
+                    const items = req.cookies.user.cart;
+                    for (const row of rows) {
+                        row.count = 0;
+                        for (const item of items) {
+                            if (row.id == item) {
+                                row.count++;
+                            }
+                        }
+                    }
+                    resolve(rows);
+                }
+            )
+        } else {
+            resolve([]);
+        }
+    });
+
+    res.locals = {
+        title: 'Coșul meu',
+    };
+    res.render('view-cart', {
+        cart: await cart,
+    });
+});
+
 app.get('/chestionar', (req, res) => {
     res.locals = {
         title: 'Chestionar'

@@ -24,7 +24,7 @@
             <% for (const product of products) { %>
             <tr>
                 <td><%= product.name %></td>
-                <td><%= product.price %></td>
+                <td><%= product.price %> lei</td>
                 <td>
                     <form action="/add-to-cart" method="post">
                         <input type="hidden" name="id" value="<%= product.id %>">
@@ -46,6 +46,8 @@
         </tfoot>
         <% } %>
     </table>
+
+    <p>Pentru a vedea ce ați adăugat în coș, navigați <a href="/view-cart">aici</a>.</p>
     <% } else { %>
     <p>Nu s-au putut încărca produsele.</p>
     <% }%>

@@ -1,0 +1,41 @@
+<%- contentFor('header') %>
+<h1>Coșul meu de cumpărături</h1>
+
+<%- contentFor('body') %>
+<div class="center-container">
+    <% if (cart.length > 0) { %>
+    <h3>În coșul dumneavoastră, ați adăugat următoarele produse:</h3>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Nume produs</th>
+                <th scope="col">Număr</th>
+                <th scope="col">Preț</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const product of cart) { %>
+            <tr>
+                <td><%= product.name %></td>
+                <td><%= product.count %></td>
+                <td><%= product.price %> lei</td>
+            </tr>
+            <% } %>
+        </tbody>
+        <tfoot>
+            <tr>
+                <th scope="row" colspan="2">Total:</td>
+                <td><%= cart.reduce((acc, product) => acc + product.price * product.count, 0) %> lei</td>
+            </tr>
+        </tfoot>
+    </table>
+    <% }  else { %>
+    <p>Nu aveți nimic în coș.</p>
+    <% } %>
+</div>
+
+<style>
+    tfoot th {
+        text-align: right;
+    }
+</style>

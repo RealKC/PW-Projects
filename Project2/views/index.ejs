@@ -2,9 +2,57 @@
 <h1><%= _locals.title %></h1>
 
 <%- contentFor('body') %>
-<form action="/create-db" method="post"><button type="submit">Creare BD</button></form>
-<form action="/load-db" method="post"><button type="submit">Încărcare BD</button></form>
-<% if (user && user.username) { %>
-<% } else { %>
-<p>Pagina de autentificare poate fi accesată dând click <a href="/auth">aici</a>.</p>
-<% } %>
+<div class="center-container">
+    <div class="row">
+        <form action="/create-db" method="post"><button type="submit">Creare BD</button></form>
+        <form action="/load-db" method="post"><button type="submit">Încărcare BD</button></form>
+    </div>
+
+    <% if (products.length > 0) {%>
+    <h3>
+        Produse disponibile în magazinul online <div class="italic">MițFood</div>
+    </h3>
+    <table>
+        <thead>
+            <tr>
+                <th scope="col">Nume produs</th>
+                <th scope="col">Preț</th>
+                <th scope="col"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <% for (const product of products) { %>
+            <tr>
+                <td><%= product.name %></td>
+                <td><%= product.price %></td>
+                <td>
+                    <form action="/add-to-cart" method="post">
+                        <input type="hidden" name="id" value="<%= product.id %>">
+                        <button type="submit" class="add-to-cart" <%= (user && user.username ? '' : 'disabled') %>>
+                            Adaugă în coș
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            <% } %>
+        </tbody>
+        <% if (!(user && user.username)) { %>
+        <tfoot>
+            <tr>
+                <td colspan="3">
+                    Pentru a putea cumpăra produse, vă rugăm să vă autentificați în cont <a href="/auth">aici</a>.
+                </td>
+            </tr>
+        </tfoot>
+        <% } %>
+    </table>
+    <% } else { %>
+    <p>Nu s-au putut încărca produsele.</p>
+    <% }%>
+</div>
+
+<style>
+    table {
+        margin: auto;
+    }
+</style>

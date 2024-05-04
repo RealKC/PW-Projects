@@ -28,14 +28,31 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set('layout extractStyles', true);
 
-app.get('/', (req, res) => {
+app.get('/', async (req, res) => {
     res.locals = {
         title: 'MițFood',
         user: req.cookies.user,
     };
 
-    res.render('index', {
+    const products = new Promise((resolve, reject) => {
+        if (!database) {
+            console.log('Database wasn\'t initialized yet, returning empty list...');
+            resolve([]);
+            return;
+        }
 
+        database.all(sql`SELECT * FROM products;`, [], (err, rows) => {
+            if (err) {
+                console.error(`Got sqlite error while querying for all products: ${err}`);
+                resolve([]);
+                return;
+            }
+            resolve(rows);
+        })
+    });
+
+    res.render('index', {
+        products: await products,
     });
 });
 
@@ -115,6 +132,19 @@ INSERT INTO products(name, price) VALUES
         }
         res.redirect('/');
     });
+});
+
+app.post('/add-to-cart', (req, res) => {
+    const id = req.body.id;
+    const user = req.cookies.user;
+
+    if (!user.cart) {
+        user.cart = [];
+    }
+
+    user.cart.push(id);
+    res.cookie('user', user);
+    res.redirect('/');
 });
 
 app.get('/chestionar', (req, res) => {

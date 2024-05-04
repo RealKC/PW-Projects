@@ -106,3 +106,24 @@ fieldset {
     padding: 1em;
     border-color: var(--blue);
 }
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border: 2px solid rgb(160 160 160);
+}
+
+th,
+td {
+    border: 1px solid rgb(160 160 160);
+    padding: 4px 6px;
+}
+
+.italic {
+    font-style: italic;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+}

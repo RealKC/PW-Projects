@@ -5,6 +5,16 @@ const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
+const sqlite3 = require('sqlite3').verbose();
+
+/** @type {import('sqlite3').Database | undefined} */
+let database = undefined;
+
+/**
+ * A function to be used for tagged template literals that makes the [Inline SQL](https://marketplace.visualstudio.com/items?itemName=qufiwefefwoyn.inline-sql-syntax)
+ * VS Code extension highlight template strings as SQL
+ */
+const sql = (strings, ...values) => String.raw({ raw: strings }, ...values);
 
 const app = express();
 
@@ -67,6 +77,44 @@ app.post('/verify-auth', (req, res) => {
 app.post('/logout', (req, res) => {
     res.clearCookie('user');
     res.redirect('/');
+});
+
+app.post('/create-db', (req, res) => {
+    database = new sqlite3.Database('./db.sqlite');
+    database.run(sql`
+CREATE TABLE IF NOT EXISTS products(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT,
+    price REAL
+);
+    `, (err) => {
+        if (err) {
+            console.error(`Got sqlite error: ${err}`);
+        }
+        res.redirect('/');
+    });
+});
+
+app.post('/load-db', (req, res) => {
+    if (!database) {
+        console.error('POST to /load-db before database was initialized');
+        res.redirect('/');
+        return;
+    }
+
+    database.run(sql`
+INSERT INTO products(name, price) VALUES
+    ('Mozarella 1kg', 20.5),
+    ('Piept de pui 1kg', 10),
+    ('Cartofi 1kg', 4),
+    ('Tabletă ciocolată Milka', 3.7),
+    ('Ciocolata Rom Buzz', 2.14);
+    `, (err) => {
+        if (err) {
+            console.error(`Got sqlite error: ${err}`);
+        }
+        res.redirect('/');
+    });
 });
 
 app.get('/chestionar', (req, res) => {

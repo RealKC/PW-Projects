@@ -6,4 +6,13 @@
         "editor.defaultFormatter": "j69.ejs-beautify"
     },
     "js-beautify.indent_size": 4,
+    "sqltools.useNodeRuntime": true,
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "Database",
+            "database": "./db.sqlite"
+        }
+    ],
 }

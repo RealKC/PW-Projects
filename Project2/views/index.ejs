@@ -2,8 +2,9 @@
 <h1><%= _locals.title %></h1>
 
 <%- contentFor('body') %>
+<form action="/create-db" method="post"><button type="submit">Creare BD</button></form>
+<form action="/load-db" method="post"><button type="submit">Încărcare BD</button></form>
 <% if (user && user.username) { %>
-<p>Pagina de index</p>
 <% } else { %>
 <p>Pagina de autentificare poate fi accesată dând click <a href="/auth">aici</a>.</p>
 <% } %>

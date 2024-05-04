@@ -6,9 +6,19 @@ const bodyParser = require('body-parser');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const sqlite3 = require('sqlite3').verbose();
+const uuid = require('uuid');
 
 /** @type {import('sqlite3').Database | undefined} */
 let database = undefined;
+
+/**
+ * A map from an auth token to a role
+ *
+ * This map exists so that the source of truth for roles is on the server, and so that
+ * adversarial users cannot forge data that would make the server think a non-admin user
+ * is an admin.
+ */
+const tokens = {};
 
 /**
  * A function to be used for tagged template literals that makes the [Inline SQL](https://marketplace.visualstudio.com/items?itemName=qufiwefefwoyn.inline-sql-syntax)
@@ -80,6 +90,8 @@ app.post('/verify-auth', (req, res) => {
         for (const user of users) {
             if (req.body.username === user.username && req.body.password === user.password) {
                 delete user['password'];
+                user.token = uuid.v4();
+                tokens[user.token] = user.role;
                 res.cookie('user', user);
                 res.redirect('/');
                 return;
@@ -134,6 +146,51 @@ INSERT INTO products(name, price) VALUES
     });
 });
 
+app.get('/admin', (req, res) => {
+    const role = tokens[req.cookies.user.token];
+    if (!role || role !== 'admin') {
+        res.status(404).send('Not Found');
+        return;
+    }
+
+    res.locals = {
+        title: 'Admin dashboard'
+    };
+    res.render('admin');
+});
+
+app.post('/add-product', (req, res) => {
+    const role = tokens[req.cookies.user.token];
+    if (!role || role !== 'admin') {
+        res.status(404).send('Not Found');
+        return;
+    }
+
+    const price = req.body.price ? Number.parseFloat(req.body.price) : undefined;
+    if (!price || !Number.isFinite(price)) {
+        console.log(`Tried adding product with price '${req.body.price}', which is invalid`);
+        res.status(400).send('Invalid input');
+        return;
+    }
+
+    const name = req.body.name;
+    if (!name || name.length < 1) {
+        console.log(`Tried adding product with name '${name}, which is invalid`);
+        res.status(400).send('Invalid input');
+        return;
+    }
+
+    if (database) {
+        database.run(sql`INSERT INTO products(name, price) VALUES (?, ?);`, [name, price], (err) => {
+            if (err) {
+                console.log(`Got error while inserting product(${name}, ${price}): ${err}`);
+            }
+        });
+    }
+
+    res.redirect('/admin');
+});
+
 app.post('/add-to-cart', (req, res) => {
     const id = req.body.id;
     const user = req.cookies.user;
@@ -149,7 +206,14 @@ app.post('/add-to-cart', (req, res) => {
 
 app.get('/view-cart', async (req, res) => {
     const cart = new Promise((resolve, reject) => {
-        const cart = [...new Set(req.cookies.user.cart)];
+        const user = req.cookies.user;
+
+        if (!user) {
+            resolve([]);
+            return;
+        }
+
+        const cart = [...new Set(user.cart)];
         if (cart.length > 0 && database) {
             database.all(
                 sql`SELECT * FROM products WHERE id in (${cart.map(() => '?').join(', ')})`,
@@ -161,7 +225,7 @@ app.get('/view-cart', async (req, res) => {
                         return;
                     }
 
-                    const items = req.cookies.user.cart;
+                    const items = user.cart;
                     for (const row of rows) {
                         row.count = 0;
                         for (const item of items) {

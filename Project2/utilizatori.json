@@ -1,11 +1,13 @@
 [
     {
         "username": "test",
-        "password": "test"
+        "password": "test",
+        "role": "admin"
     },
     {
         "username": "aa",
         "password": "a",
+        "role": "user",
         "surname": "aa",
         "name": "a",
         "email": "a",
@@ -20,6 +22,7 @@
     {
         "username": "abc",
         "password": "abc",
+        "role": "user",
         "surname": "nume",
         "name": "prenume",
         "email": "ema",

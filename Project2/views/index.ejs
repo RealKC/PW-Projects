@@ -4,7 +4,9 @@
 <%- contentFor('body') %>
 <div class="center-container">
     <div class="row">
+        <% if (!user) { %>
         <form method="get" action="/auth"><button type="submit">Login</button></form>
+        <% } %>
         <form action="/create-db" method="post"><button type="submit">Creare BD</button></form>
         <form action="/load-db" method="post"><button type="submit">Încărcare BD</button></form>
     </div>

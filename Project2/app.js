@@ -97,6 +97,7 @@ app.get('/', async (req, res) => {
             return;
         }
 
+        // Not vulnerable to SQL injection as it doesn't use user input
         database.all(sql`SELECT * FROM products;`, [], (err, rows) => {
             if (err) {
                 console.error(`Got sqlite error while querying for all products: ${err}`);
@@ -225,6 +226,7 @@ app.post('/logout', (req, res) => {
 
 app.post('/create-db', (req, res) => {
     database = new sqlite3.Database('./db.sqlite');
+    // Not vulnerable to SQL injection as it doesn't use user input
     database.run(sql`
 CREATE TABLE IF NOT EXISTS products(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -246,6 +248,7 @@ app.post('/load-db', (req, res) => {
         return;
     }
 
+    // Not vulnerable to SQL injection as it doesn't use user input
     database.run(sql`
 INSERT INTO products(name, price) VALUES
     ('Mozarella 1kg', 20.5),
@@ -296,6 +299,7 @@ app.post('/add-product', (req, res) => {
     }
 
     if (database) {
+        // Not vulnerable to SQL injection as it properly uses prepared statements
         database.run(sql`INSERT INTO products(name, price) VALUES (?, ?);`, [name, price], (err) => {
             if (err) {
                 console.log(`Got error while inserting product(${name}, ${price}): ${err}`);
@@ -330,6 +334,9 @@ app.get('/view-cart', async (req, res) => {
 
         const cart = [...new Set(user.cart)];
         if (cart.length > 0 && database) {
+            // Not vulnerable to SQL injection as the string concatenation is limited to strings I control
+            // (even though it is based on user input, none of it goes in the final query string), and it
+            // uses prepared statements
             database.all(
                 sql`SELECT * FROM products WHERE id in (${cart.map(() => '?').join(', ')})`,
                 cart,

@@ -21,6 +21,50 @@ let database = undefined;
 const tokens = {};
 
 /**
+ * Map from ip address to number of logins
+ *
+ * @type {Map<string, number>}
+ */
+const failedLoginsByIP = new Map();
+
+/**
+ * Map from username to number of logins
+ *
+ * @type {Map<string, number>}
+ */
+const failedLoginsByName = new Map();
+
+/**
+ * Checks if an IP or username is currently banned
+ *
+ * @param {{username?: string, ip?: string}} param
+ * @return {boolean}
+ */
+function isBanned(param) {
+    if (param.username) {
+        if ((failedLoginsByName.get(param.username) ?? 0) >= 10) {
+            return true;
+        }
+    }
+
+    if (param.ip) {
+        if ((failedLoginsByIP.get(param.ip) ?? 0) >= 10) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+function ipBannedMiddleware(req, res, next) {
+    if (isBanned({ ip: req.ip })) {
+        res.status(401).send('Interzis');
+        return;
+    }
+    next();
+}
+
+/**
  * A function to be used for tagged template literals that makes the [Inline SQL](https://marketplace.visualstudio.com/items?itemName=qufiwefefwoyn.inline-sql-syntax)
  * VS Code extension highlight template strings as SQL
  */
@@ -32,6 +76,7 @@ const port = 6789;
 
 app.set('view engine', 'ejs');
 app.set('trust proxy', false);
+app.use(ipBannedMiddleware);
 app.use(expressLayouts);
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());
@@ -77,13 +122,6 @@ app.get('/auth', (req, res) => {
 });
 
 /**
- * Map from ip address to number of logins
- *
- * @type {Map<string, number>}
- */
-const failedLoginsByIP = new Map();
-
-/**
  * How much the server will wait after a failed login before decrementing its counter, in milliseconds.
  *
  * @type {number}
@@ -119,13 +157,6 @@ function addFailedLoginByIP(ip) {
 }
 
 /**
- * Map from username to number of logins
- *
- * @type {Map<string, number>}
- */
-const failedLoginsByName = new Map();
-
-/**
  * Adds a failed login for the given username
  *
  * @param {string} username
@@ -151,28 +182,6 @@ function addFailedLoginByUsername(username) {
     }, FAILED_LOGIN_TIMEOUT);
 
     return (count ?? 0) + 1;
-}
-
-/**
- * Checks if an IP or username is currently banned
- *
- * @param {{username?: string, ip?: string}} param
- * @return {boolean}
- */
-function isBanned(param) {
-    if (param.username) {
-        if ((failedLoginsByName.get(param.username) ?? 0) >= 10) {
-            return true;
-        }
-    }
-
-    if (param.ip) {
-        if ((failedLoginsByIP.get(param.ip) ?? 0) >= 10) {
-            return true;
-        }
-    }
-
-    return false;
 }
 
 app.post('/verify-auth', (req, res) => {

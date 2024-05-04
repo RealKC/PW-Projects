@@ -127,3 +127,11 @@ td {
     display: flex;
     flex-direction: row;
 }
+
+a {
+    color: var(--blue);
+}
+
+a:visited {
+    color: var(--red);
+}

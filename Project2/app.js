@@ -31,6 +31,7 @@ const app = express();
 const port = 6789;
 
 app.set('view engine', 'ejs');
+app.set('trust proxy', false);
 app.use(expressLayouts);
 app.use('/public', express.static('public'));
 app.use(bodyParser.json());
@@ -75,9 +76,106 @@ app.get('/auth', (req, res) => {
     });
 });
 
-app.post('/verify-auth', (req, res) => {
-    console.log(`verify-auth ${req.body} ${req.body.username} ${req.body.password}`);
+/**
+ * Map from ip address to number of logins
+ *
+ * @type {Map<string, number>}
+ */
+const failedLoginsByIP = new Map();
 
+/**
+ * How much the server will wait after a failed login before decrementing its counter, in milliseconds.
+ *
+ * @type {number}
+ */
+const FAILED_LOGIN_TIMEOUT = 30_000;
+
+/**
+ * Adds a failed login for the given IP
+ *
+ * @param {string} ip
+ * @return {number} The number of failed logins so far
+ */
+function addFailedLoginByIP(ip) {
+    const count = failedLoginsByIP.get(ip);
+    if (!count) {
+        failedLoginsByIP.set(ip, 1);
+    } else {
+        failedLoginsByIP.set(ip, count + 1);
+    }
+
+    setTimeout(() => {
+        const count = failedLoginsByIP.get(ip);
+        if (count) {
+            if (count == 1) {
+                failedLoginsByIP.delete(ip);
+            } else {
+                failedLoginsByIP.set(ip, count - 1);
+            }
+        }
+    }, FAILED_LOGIN_TIMEOUT);
+
+    return (count ?? 0) + 1;
+}
+
+/**
+ * Map from username to number of logins
+ *
+ * @type {Map<string, number>}
+ */
+const failedLoginsByName = new Map();
+
+/**
+ * Adds a failed login for the given username
+ *
+ * @param {string} username
+ * @return {number} The number of failed logins so far
+ */
+function addFailedLoginByUsername(username) {
+    const count = failedLoginsByName.get(username);
+    if (!count) {
+        failedLoginsByName.set(username, 1);
+    } else {
+        failedLoginsByName.set(username, count + 1);
+    }
+
+    setTimeout(() => {
+        const count = failedLoginsByName.get(username);
+        if (count) {
+            if (count == 1) {
+                failedLoginsByName.delete(username);
+            } else {
+                failedLoginsByName.set(username, count - 1);
+            }
+        }
+    }, FAILED_LOGIN_TIMEOUT);
+
+    return (count ?? 0) + 1;
+}
+
+/**
+ * Checks if an IP or username is currently banned
+ *
+ * @param {{username?: string, ip?: string}} param
+ * @return {boolean}
+ */
+function isBanned(param) {
+    if (param.username) {
+        if ((failedLoginsByName.get(param.username) ?? 0) >= 10) {
+            return true;
+        }
+    }
+
+    if (param.ip) {
+        if ((failedLoginsByIP.get(param.ip) ?? 0) >= 10) {
+            return true;
+        }
+    }
+
+    return false;
+}
+
+app.post('/verify-auth', (req, res) => {
     fs.readFile('utilizatori.json', (err, data) => {
         if (err) {
             throw err;
@@ -86,6 +184,12 @@ app.post('/verify-auth', (req, res) => {
         const users = JSON.parse(data);
 
         res.clearCookie('errorMessage')
+
+        if (isBanned({ ip: req.ip, username: req.body.username })) {
+            res.cookie('errorMessage', 'Încearcă din nou mai târziu');
+            res.status(401).redirect('/auth');
+            return;
+        }
 
         for (const user of users) {
             if (req.body.username === user.username && req.body.password === user.password) {
@@ -98,6 +202,8 @@ app.post('/verify-auth', (req, res) => {
             }
         }
 
+        addFailedLoginByIP(req.ip);
+        addFailedLoginByUsername(req.body.username);
         res.cookie('errorMessage', 'Credențiale greșite');
         res.redirect('/auth');
     });

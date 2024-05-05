@@ -36,6 +36,68 @@ const failedLoginsByIP = new Map();
 const failedLoginsByName = new Map();
 
 /**
+ * This map stores how many times an IP has triggered a 404, and how many times it was trying to access a
+ * suspicious path
+ *
+ * @type {Map<string, {count: number, suspiciousPathsCount: number, readonly isBanned: boolean}>}
+ */
+const notFoundByIP = new Map();
+
+/**
+ * How many 404s an IP must trigger before it is banned
+ *
+ * @type {number}
+ */
+const COUNT_SUSPICION_THRESHOLD = 10;
+
+/**
+ * How many 404s accessing suspicious paths an IP must trigger before it is banned
+ *
+ * @type {number}
+ */
+const SUSPICIOUS_PATH_COUNT_SUSPICION_THRESHOLD = 10;
+
+/**
+ * Register a 404 for a given IP
+ *
+ * @param {string} ip
+ * @param {string} path
+ * @return {boolean} true if the user got banned as a result of this 404
+ */
+function register404(ip, path) {
+    let obj = notFoundByIP.get(ip) ?? {
+        count: 0,
+        suspiciousPathsCount: 0,
+        get isBanned() {
+            return this.count >= COUNT_SUSPICION_THRESHOLD || this.suspiciousPathsCount >= SUSPICIOUS_PATH_COUNT_SUSPICION_THRESHOLD;
+        }
+    };
+    obj.count += 1;
+
+    /**
+     * @callback PathMatcher
+     * @param {string} path
+     * @return {boolean}
+     *
+     * @type {PathMatcher[]}
+     */
+    const SUSPICIOUS_PATH_MATCHERS = [
+        (path) => path === 'wp-login.php',
+        (path) => path.startsWith('/wp-admin/')
+    ];
+
+    for (const matcher of SUSPICIOUS_PATH_MATCHERS) {
+        if (matcher(path)) {
+            obj.suspiciousPathsCount += 1;
+        }
+    }
+
+    notFoundByIP.set(ip, obj);
+
+    return obj.isBanned;
+}
+
+/**
  * Checks if an IP or username is currently banned
  *
  * @param {{username?: string, ip?: string}} param
@@ -50,6 +112,11 @@ function isBanned(param) {
 
     if (param.ip) {
         if ((failedLoginsByIP.get(param.ip) ?? 0) >= 10) {
+            return true;
+        }
+
+        const obj = notFoundByIP.get(param.ip);
+        if (obj && obj.isBanned) {
             return true;
         }
     }
@@ -266,10 +333,10 @@ INSERT INTO products(name, price) VALUES
     });
 });
 
-app.get('/admin', (req, res) => {
+app.get('/admin', (req, res, next) => {
     const role = tokens[req.cookies.user.token];
     if (!role || role !== 'admin') {
-        res.status(404).send('Not Found');
+        next();
         return;
     }
 
@@ -279,10 +346,10 @@ app.get('/admin', (req, res) => {
     res.render('admin');
 });
 
-app.post('/add-product', (req, res) => {
+app.post('/add-product', (req, res, next) => {
     const role = tokens[req.cookies.user.token];
     if (!role || role !== 'admin') {
-        res.status(404).send('Not Found');
+        next();
         return;
     }
 
@@ -407,6 +474,17 @@ app.post('/rezultat-chestionar', (req, res) => {
 
         res.render('questionnaire-result', { correctAmount, totalAmount: questions.length })
     })
+});
+
+app.use((req, res, next) => {
+    const isBanned = register404(req.ip, req.path);
+
+    if (isBanned) {
+        res.status(401).send('Forbidden');
+    } else {
+        res.locals = { title: 404 };
+        res.status(404).render('404');
+    }
 });
 
 app.listen(port, () => console.log(`The server is running at http://localhost:${port}`));

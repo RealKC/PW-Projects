@@ -94,6 +94,11 @@ function register404(ip, path) {
 
     notFoundByIP.set(ip, obj);
 
+    setTimeout(() => {
+        obj.count -= 1;
+        obj.suspiciousPathsCount -= 1;
+    }, 30_000);
+
     return obj.isBanned;
 }
 

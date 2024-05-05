@@ -3,6 +3,7 @@
 const express = require('express');
 const expressLayouts = require('express-ejs-layouts');
 const bodyParser = require('body-parser');
+const favicon = require('serve-favicon');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 const sqlite3 = require('sqlite3').verbose();
@@ -83,6 +84,7 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.set('layout extractStyles', true);
+app.use(favicon('public/favicon.ico'));
 
 app.get('/', async (req, res) => {
     res.locals = {

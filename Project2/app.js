@@ -477,6 +477,7 @@ app.post('/rezultat-chestionar', (req, res) => {
             }
         }
 
+        res.locals = { title: "Rezultat" };
         res.render('questionnaire-result', { correctAmount, totalAmount: questions.length })
     })
 });

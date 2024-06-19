@@ -1,0 +1,24 @@
+<%- contentFor('header') %>
+<h1>Admin dashboard</h1>
+
+<%- contentFor('body') %>
+<form action="/add-product" method="post">
+    <fieldset>
+        <legend>Detalii produs</legend>
+        <label>
+            Nume produs:
+            <input type="text" name="name" required minlength="0" />
+        </label>
+        <label>
+            Preț:
+            <input type="number" name="price" required min="0" />
+        </label>
+    </fieldset>
+    <button type="submit">Adaugă produs</button>
+</form>
+
+<style>
+    input:invalid {
+        border: 2px dotted var(--red);
+    }
+</style>

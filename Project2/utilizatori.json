@@ -1,0 +1,37 @@
+[
+    {
+        "username": "test",
+        "password": "test",
+        "role": "admin"
+    },
+    {
+        "username": "aa",
+        "password": "a",
+        "role": "user",
+        "surname": "aa",
+        "name": "a",
+        "email": "a",
+        "phoneNumber": "a",
+        "favouriteDish": "a",
+        "birthDate": "2024-04-09",
+        "birthTime": "23:02",
+        "ageSlider": "18",
+        "webpageURL": "as",
+        "foods": "a"
+    },
+    {
+        "username": "abc",
+        "password": "abc",
+        "role": "user",
+        "surname": "nume",
+        "name": "prenume",
+        "email": "ema",
+        "phoneNumber": "084283",
+        "favouriteDish": "gulas",
+        "birthDate": "12323-12-11",
+        "birthTime": "23:02",
+        "ageSlider": "67",
+        "webpageURL": "example.com",
+        "foods": "gulas"
+    }
+]

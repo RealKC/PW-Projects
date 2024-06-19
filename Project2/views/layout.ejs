@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8" />
+    <title><%= title %></title>
+
+    <link href="/public/style.css" type="text/css" rel="stylesheet" />
+    <%- style %>
+</head>
+<header>
+    <%- header %>
+</header>
+
+<% if (_locals.user) { %>
+<nav>
+    Bine ai venit, <%= user.username %>!
+
+    <div class="row">
+        <% if (_locals.user.role === 'admin') { %>
+        <form method="get" action="/admin"><button type="submit">Admin dashboard</button></form>
+        <% } %>
+        <form method="post" action="/logout"><button type="submit">Logout</button></form>
+    </div>
+</nav>
+<% } %>
+
+<body>
+    <%- body %>
+</body>
+
+</html>

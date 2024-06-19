@@ -1,0 +1,76 @@
+<%- contentFor('header') %>
+<h1><%= _locals.title %></h1>
+
+<%- contentFor('body') %>
+<p>Vă rog completați următorul chestionar:</p>
+
+
+<form action="/rezultat-chestionar" method="post">
+    <% for (const question of questions) { %>
+    <fieldset>
+        <legend>
+            <%= question.question %>
+        </legend>
+
+        <% for (let i = 0; i < question.variants.length; ++i) { %>
+        <% if (i !=0) { %> <br /> <% } %>
+        <label class="form-control" for="<%= `${i}${question.id}` %>">
+            <input type="radio" id="<%= `${i}${question.id}` %>" name="<%= question.id %>" value="<%= i %>" required />
+            <%= question.variants[i] %>
+        </label>
+        <% } %>
+    </fieldset>
+    <% } %>
+
+    <input type="submit" class="submit-button" value="Trimite răspunsuri" />
+
+</form>
+
+<style>
+    /* radio button styling based on this tutorial: https://moderncss.dev/pure-css-custom-styled-radio-buttons/ */
+    .form-control {
+        font-family: system-ui, sans-serif;
+        line-height: 1.1;
+        display: grid;
+        grid-template-columns: 1em auto;
+        gap: 0.5em;
+    }
+
+    input[type="radio"] {
+        appearance: none;
+        background-color: var(--bg);
+        display: grid;
+        place-content: center;
+        margin: 0;
+        font: inherit;
+        color: var(--orange);
+        width: 1.15em;
+        height: 1.15em;
+        border: 0.15em solid var(--orange);
+        border-radius: 50%;
+        transform: translateY(-0.075em);
+    }
+
+    input[type="radio"]::before {
+        content: "";
+        width: 0.65em;
+        height: 0.65em;
+        border-radius: 50%;
+        transform: scale(0);
+        transition: 120ms transform ease-in-out;
+        box-shadow: inset 1em 1em var(--orange);
+    }
+
+    input[type="radio"]:checked::before {
+        transform: scale(1);
+    }
+
+    input[type="radio"]:focus {
+        outline: max(2px, 0.15em) solid var(--orange-dim);
+        outline-offset: max(2px, 0.15em);
+    }
+
+    .form-control+.form-control {
+        margin-top: 1em;
+    }
+</style>
